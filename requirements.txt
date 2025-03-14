@@ -11,3 +11,9 @@ plotly==5.20.0
 gtts==2.5.1
 python-dotenv==1.0.1  # Add this
 tensorflow==2.12.0
+newsapi-python==0.2.7
+gnews==0.4.0
+tweepy==4.14.0
+beautifulsoup4==4.12.3
+apscheduler==3.11.0
+feedparser==6.0.11
