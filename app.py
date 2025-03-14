@@ -27,7 +27,7 @@ load_dotenv()
 
 # Fix OpenMP conflict and tokenizers warning
 os.environ["MKL_THREADING_LAYER"] = "GNU"
-os.environ["TOKENIZERS_PARALLELISM"] = "false
+os.environ["TOKENIZERS_PARALLELISM"] = "false"  # Fixed: added closing quotation mark
 
 # Page config
 st.set_page_config(page_title="NewsFetcher", layout="wide", initial_sidebar_state="collapsed")
