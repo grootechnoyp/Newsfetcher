@@ -1,4 +1,4 @@
-# fetch_news.py
+# fetch_news.py (top section only—replace this part)
 from newsapi import NewsApiClient
 from gnews import GNews
 import sqlite3
@@ -9,8 +9,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import tweepy
 import time
 import feedparser
-from transformers import pipeline
-from dotenv import load_dotenv  # Add this import
+from transformers.pipelines import pipeline  # Updated import
+from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env
@@ -30,7 +30,7 @@ if not X_BEARER_TOKEN:
     raise ValueError("X_BEARER_TOKEN not set in environment variables")
 
 newsapi = NewsApiClient(api_key=NEWSAPI_KEY)
-google_news = GNews(max_results=20, api_key=GNEWS_KEY)  # Assuming GNews supports an API key
+google_news = GNews(max_results=20)  # Removed api_key as it’s not supported
 client = tweepy.Client(bearer_token=X_BEARER_TOKEN)
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
