@@ -1,4 +1,4 @@
-# app.py (updated with Hot Takes)
+# app.py (top section only—replace this part)
 import streamlit as st
 import sqlite3
 import pandas as pd
@@ -6,7 +6,7 @@ import time
 from datetime import datetime, timedelta
 import requests
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from transformers import pipeline
+from transformers.pipelines import pipeline  # Updated import
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
 import numpy as np
@@ -20,10 +20,14 @@ import json
 import queue
 import random
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv()
 
 # Fix OpenMP conflict and tokenizers warning
 os.environ["MKL_THREADING_LAYER"] = "GNU"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["TOKENIZERS_PARALLELISM"] = "false
 
 # Page config
 st.set_page_config(page_title="NewsFetcher", layout="wide", initial_sidebar_state="collapsed")
