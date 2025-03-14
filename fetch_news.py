@@ -10,21 +10,33 @@ import tweepy
 import time
 import feedparser
 from transformers import pipeline
+from dotenv import load_dotenv  # Add this import
+import os
 
-# API Keys (replace with your own)
-NEWSAPI_KEY = '23ccac7d02af4646bfc72f18a5dfacdb'
-GNEWS_KEY = 'b5d2fdc194a113fabc6bbe75536a5340'
-X_BEARER_TOKEN = 'AAAAAAAAAAAAAAAAAAAAALRpzwEAAAAA3ipZ7NqyElDPD0ieQ98bxx31BD0%3DCubMIh6jXMcgIG78zPyWEP0al8JXbOM01CZBbg5orlnLJXXFIQ'
+# Load environment variables from .env
+load_dotenv()
 
-# Initialize APIs and AI model
+# API Keys from environment variables
+NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
+GNEWS_KEY = os.getenv("GNEWS_KEY")
+X_BEARER_TOKEN = os.getenv("X_BEARER_TOKEN")
+
+# Initialize APIs and AI model with checks
+if not NEWSAPI_KEY:
+    raise ValueError("NEWSAPI_KEY not set in environment variables")
+if not GNEWS_KEY:
+    raise ValueError("GNEWS_KEY not set in environment variables")
+if not X_BEARER_TOKEN:
+    raise ValueError("X_BEARER_TOKEN not set in environment variables")
+
 newsapi = NewsApiClient(api_key=NEWSAPI_KEY)
-google_news = GNews(max_results=20)
+google_news = GNews(max_results=20, api_key=GNEWS_KEY)  # Assuming GNews supports an API key
 client = tweepy.Client(bearer_token=X_BEARER_TOKEN)
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
-# Database connection with timeout
+# Database connection with relative path
 def get_db_connection():
-    conn = sqlite3.connect('/Users/yashmandaviya/Newsfetcher/NewsFetcher/news.db', timeout=10)
+    conn = sqlite3.connect('news.db', timeout=10)  # Updated to relative path
     return conn
 
 # News fetching function
@@ -121,16 +133,15 @@ def fetch_news(language='en'):
                 except Exception as e:
                     print(f"Scraping error for {url}: {e}")
 
-            # Adjusted URLs (fixed typo and removed invalid ones)
             scrape_site('https://techcrunch.com/tag/artificial-intelligence/', 'artificial intelligence')
             scrape_site('https://techcrunch.com/tag/blockchain/', 'blockchain')
-            scrape_site('https://www.coindesk.com/', 'cryptocurrency')  # Replaced invalid identif.org
+            scrape_site('https://www.coindesk.com/', 'cryptocurrency')
             scrape_site('https://techcrunch.com/tag/cybersecurity/', 'cybersecurity')
 
             # Fetch from RSS feeds
             rss_feeds = ["https://techcrunch.com/feed/", "https://www.coindesk.com/feed/"]
             try:
-                with open("/Users/yashmandaviya/Newsfetcher/NewsFetcher/rss_feeds.txt", "r") as f:
+                with open("rss_feeds.txt", "r") as f:  # Updated to relative path
                     rss_feeds.extend([line.strip() for line in f if line.strip()])
             except FileNotFoundError:
                 print("rss_feeds.txt not found, using default feeds.")
